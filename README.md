@@ -32,13 +32,19 @@ dependencies {
 ```
 
 ## Customization
+
+Currently there are two customizable variables for the feature: The
+`SENTRY_DSN` to use which, per default, is fetched from the
+environment. The other variable `appEnv` sets the environment
+(e.g. prod or dev) the exceptions are reported as occurring within.
+
 ```kotlin
 import se.zensum.ktorSentry.SentryFeature
 
 embeddedServer(Netty, 8080) {
     install(SentryFeature){
-        dsn = yourSentryDSN //
-        appEnv = yourAppEnv
+        dsn = yourSentryDSN // Override the default of SENTRY_DSN
+        appEnv = yourAppEnv // Set an enviorment such as prod or dev for reported exceptions
     }
 }.start(wait = true)
 ```
