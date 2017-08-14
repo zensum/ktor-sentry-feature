@@ -1,4 +1,4 @@
-# ktor-sentry Sentry reporting for ktor
+# ktor-sentry - Sentry reporting for ktor
 [![license](https://img.shields.io/github/license/zensum/ktor-sentry-feature.svg)]() [![](https://jitpack.io/v/zensum/ktor-sentry-feature.svg)](https://jitpack.io/#zensum/ktor-sentry-feature)
 
 Ktor-sentry adds support for reporting unhandled exceptions
