@@ -18,7 +18,7 @@ private inline fun <T> sentryWrap(fn: () -> T) = try {
     Sentry.clearContext()
 }
 
-class SentryFeature(configuration: Configuration) {
+class SentryFeature private constructor(){
 
     class Configuration {
         var dsn: String? = null
@@ -47,7 +47,7 @@ class SentryFeature(configuration: Configuration) {
         override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): SentryFeature {
             val cfg = Configuration().apply(configure)
             cfg.initClient()
-            val result = SentryFeature(cfg)
+            val result = SentryFeature()
 
             pipeline.intercept(ApplicationCallPipeline.Call) {
                 result.intercept(this)
