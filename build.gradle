@@ -38,7 +38,6 @@ junitPlatform {
 
 repositories {
     jcenter()
-    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
     maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
