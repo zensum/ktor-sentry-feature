@@ -9,6 +9,15 @@ import org.jetbrains.ktor.util.AttributeKey
 
 private typealias CustomizeFn = SentryClient.() -> Unit
 
+private inline fun <T> sentryWrap(fn: () -> T) = try {
+    fn()
+} catch (ex: Exception) {
+    Sentry.capture(ex)
+    throw ex
+} finally {
+    Sentry.clearContext()
+}
+
 class SentryFeature(configuration: Configuration) {
 
     class Configuration {
@@ -18,7 +27,7 @@ class SentryFeature(configuration: Configuration) {
         fun customize(fn: CustomizeFn) { customizeFn = fn }
 
         internal fun initClient() {
-            // If the user has specified a
+            // If the user has specified a DSN
             if (dsn != null) {
                 Sentry.init(dsn)
             }
@@ -30,12 +39,7 @@ class SentryFeature(configuration: Configuration) {
     }
 
     suspend fun intercept(context: PipelineContext<Unit>) {
-        try {
-            context.proceed()
-        } catch (e: Exception) {
-            Sentry.capture(e)
-            throw e
-        }
+        sentryWrap { context.proceed() }
     }
 
     companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, SentryFeature> {
