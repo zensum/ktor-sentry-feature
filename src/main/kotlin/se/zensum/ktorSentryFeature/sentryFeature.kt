@@ -12,7 +12,7 @@ class SentryFeature(configuration: Configuration) {
     val sentryClient = Sentry.init(configuration.dsn).apply {environment = configuration.appEnv }
 
     class Configuration {
-        var dsn: String? = System.getenv()["SENTRY_DSN"]
+        var dsn: String? = null
         var appEnv: String = "n/a"
     }
 
