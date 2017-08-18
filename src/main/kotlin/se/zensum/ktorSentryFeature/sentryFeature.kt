@@ -16,7 +16,7 @@ class SentryFeature(configuration: Configuration) {
         var appEnv: String = "n/a"
     }
 
-    suspend fun intercept(context: PipelineContext<ApplicationCall>){
+    suspend fun intercept(context: PipelineContext<Unit>) {
         try{
             context.proceed()
         }catch (e: Exception){
