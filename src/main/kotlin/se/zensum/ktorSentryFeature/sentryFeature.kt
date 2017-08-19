@@ -18,7 +18,7 @@ private inline fun <T> sentryWrap(fn: () -> T) = try {
     Sentry.clearContext()
 }
 
-class SentryFeature private constructor(){
+class SentryFeature private constructor() {
 
     class Configuration {
         var dsn: String? = null
