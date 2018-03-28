@@ -1,11 +1,12 @@
 package se.zensum.ktorSentry
 
+import io.ktor.application.ApplicationCall
+import io.ktor.application.ApplicationCallPipeline
+import io.ktor.application.ApplicationFeature
+import io.ktor.pipeline.PipelineContext
+import io.ktor.util.AttributeKey
 import io.sentry.Sentry
 import io.sentry.SentryClient
-import org.jetbrains.ktor.application.ApplicationCallPipeline
-import org.jetbrains.ktor.application.ApplicationFeature
-import org.jetbrains.ktor.pipeline.PipelineContext
-import org.jetbrains.ktor.util.AttributeKey
 
 private typealias CustomizeFn = SentryClient.() -> Unit
 
@@ -38,7 +39,7 @@ class SentryFeature private constructor() {
         }
     }
 
-    suspend fun intercept(context: PipelineContext<Unit>) {
+    suspend fun intercept(context: PipelineContext<Unit, ApplicationCall>) {
         sentryWrap { context.proceed() }
     }
 
