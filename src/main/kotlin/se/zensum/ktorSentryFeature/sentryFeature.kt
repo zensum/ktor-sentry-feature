@@ -24,6 +24,7 @@ class SentryFeature private constructor() {
     class Configuration {
         var dsn: String? = null
         var appEnv: String? = null
+        var serverName: String? = null
         var customizeFn: CustomizeFn? = null
         fun customize(fn: CustomizeFn) { customizeFn = fn }
 
@@ -32,9 +33,17 @@ class SentryFeature private constructor() {
             if (dsn != null) {
                 Sentry.init(dsn)
             }
-            if (appEnv != null) {
-                Sentry.getStoredClient().environment = appEnv
+
+            Sentry.getStoredClient().apply {
+                serverName?.let {
+                    val user: String? = System.getProperty("user.name")
+                    this.serverName =  user?.let { "$it@" } + hostname()
+                }
+                appEnv?.let {
+                    this.environment = appEnv
+                }
             }
+
             customizeFn?.invoke(Sentry.getStoredClient())
         }
     }
