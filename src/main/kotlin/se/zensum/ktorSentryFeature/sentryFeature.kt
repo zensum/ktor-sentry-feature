@@ -39,7 +39,8 @@ class SentryFeature private constructor() {
             client.serverName = this.serverName
             if(client.serverName == null) {
                 val user: String? = System.getProperty("user.name")
-                client.serverName =  user?.let { "$it@" } + hostname()
+                val hostname: String? = user?.let { "$it@" } + hostname()
+                client.serverName = hostname
             }
 
             appEnv?.let { env ->
