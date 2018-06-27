@@ -34,14 +34,16 @@ class SentryFeature private constructor() {
                 Sentry.init(dsn)
             }
 
-            Sentry.getStoredClient().apply {
-                serverName?.let {
-                    val user: String? = System.getProperty("user.name")
-                    this.serverName =  user?.let { "$it@" } + hostname()
-                }
-                appEnv?.let {
-                    this.environment = appEnv
-                }
+            val client = Sentry.getStoredClient()
+
+            client.serverName = this.serverName
+            if(client.serverName == null) {
+                val user: String? = System.getProperty("user.name")
+                this.serverName =  user?.let { "$it@" } + hostname()
+            }
+
+            appEnv?.let { env ->
+                client.environment = env
             }
 
             customizeFn?.invoke(Sentry.getStoredClient())
