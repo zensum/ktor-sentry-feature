@@ -24,6 +24,7 @@ class SentryFeature private constructor() {
     class Configuration {
         var dsn: String? = null
         var appEnv: String? = null
+        var serverName: String? = null
         var customizeFn: CustomizeFn? = null
         fun customize(fn: CustomizeFn) { customizeFn = fn }
 
@@ -32,9 +33,20 @@ class SentryFeature private constructor() {
             if (dsn != null) {
                 Sentry.init(dsn)
             }
-            if (appEnv != null) {
-                Sentry.getStoredClient().environment = appEnv
+
+            val client = Sentry.getStoredClient()
+
+            client.serverName = this.serverName
+            if(client.serverName == null) {
+                val user: String? = System.getProperty("user.name")
+                val hostname: String? = user?.let { "$it@" } + hostname()
+                client.serverName = hostname
             }
+
+            appEnv?.let { env ->
+                client.environment = env
+            }
+
             customizeFn?.invoke(Sentry.getStoredClient())
         }
     }
@@ -48,6 +60,7 @@ class SentryFeature private constructor() {
         override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): SentryFeature {
             val cfg = Configuration().apply(configure)
             cfg.initClient()
+            check(cfg.dsn != null) { "Sentry DSN must be set for Sentry to work" }
             val result = SentryFeature()
 
             pipeline.intercept(ApplicationCallPipeline.Call) {
