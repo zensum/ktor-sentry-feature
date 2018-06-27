@@ -42,7 +42,7 @@ dependencies {
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 
     compile "io.ktor:ktor-server-core:$ktor_version"
-    compile group: 'io.sentry', name: 'sentry', version: '1.7.2'
+    compile group: 'io.sentry', name: 'sentry', version: '1.7.5'
 }
 
 compileKotlin {
