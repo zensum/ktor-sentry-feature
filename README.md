@@ -45,6 +45,7 @@ embeddedServer(Netty, 8080) {
     install(SentryFeature){
         dsn = yourSentryDSN // Override the default of SENTRY_DSN
         appEnv = yourAppEnv // Set an enviorment such as prod or dev for reported exceptions
+        serverName = yourServerName // Set the server name that will be used in exception reports
     }
 }.start(wait = true)
 ```
