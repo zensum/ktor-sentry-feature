@@ -60,7 +60,6 @@ class SentryFeature private constructor() {
         override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): SentryFeature {
             val cfg = Configuration().apply(configure)
             cfg.initClient()
-            check(cfg.dsn != null) { "Sentry DSN must be set for Sentry to work" }
             val result = SentryFeature()
 
             pipeline.intercept(ApplicationCallPipeline.Call) {
